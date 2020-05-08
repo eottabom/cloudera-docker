@@ -9,15 +9,13 @@ hadoop은 1개의 namenode와 3개의 datanode로 구성
 
 ├── build.sh  
 ├── DataNodes  
-│   ├── Dockerfile   
-│   └── hyosungitx.crt  
+│   └── Dockerfile   
 ├── docker_cluster_hosts  
 ├── docker-compose.yml  
 ├── HeadNodes  
 │   ├── cloudera-manager.repo  
 │   ├── create_databases.sql  
 │   ├── Dockerfile  
-│   ├── hyosungitx.crt  
 │   └── my.cnf  
 ├── README.md  
 └── up.sh  
