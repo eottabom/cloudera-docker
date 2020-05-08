@@ -1,0 +1,81 @@
+version: '3.4'
+services:
+   datanode1:
+     build:
+       context: ./DataNodes
+       dockerfile: Dockerfile
+     image: image/datanode1
+     container_name: datanode1
+     hostname: datanode1.cluster
+     privileged: true
+     networks:
+       dev_cluster:
+         ipv4_address: 192.168.123.5
+     volumes:
+       - /etc/hosts:/etc/hosts
+       - /data/cloudera/datanode1/data:/data
+       - /data/cloudera/datanode1/mysql:/var/lib/mysql
+       - /data/cloudera/datanode1/mysql_files/my.cnf:/etc/mysql_files
+     command: bash -c "sudo chkconfig sshd on && sudo service sshd start && tail -f /dev/null"
+   datanode2:
+     build:
+       context: ./DataNodes
+       dockerfile: Dockerfile
+     image: image/datanode2
+     container_name: datanode2
+     hostname: datanode2.cluster
+     privileged: true
+     networks:
+       dev_cluster:
+         ipv4_address: 192.168.123.2
+     volumes:
+       - /etc/hosts:/etc/hosts
+       - /data/cloudera/datanode2/data:/data
+       - /data/cloudera/datanode2/mysql:/var/lib/mysql
+       - /data/cloudera/datanode2/mysql_files:/etc/mysql_files
+     command: bash -c "sudo chkconfig sshd on && sudo service sshd start && tail -f /dev/null"
+   datanode3:
+     build:
+       context: ./DataNodes
+       dockerfile: Dockerfile
+     image: image/datanode3
+     container_name: datanode3
+     hostname: datanode3.cluster
+     privileged: true
+     networks:
+       dev_cluster:
+         ipv4_address: 192.168.123.3
+     volumes:
+       - /etc/hosts:/etc/hosts
+       - /data/cloudera/datanode3/data:/data
+       - /data/cloudera/datanode3/mysql:/var/lib/mysql
+       - /data/cloudera/datanode3/mysql_files:/etc/mysql_files
+     command: bash -c "sudo chkconfig sshd on && sudo service sshd start && tail -f /dev/null"
+   headnode1:
+     build:
+       context: ./HeadNodes
+       dockerfile: Dockerfile
+     image: image/headnode1
+     ports:
+       - 10060:7180
+       - 10068:8888
+       - 10061:9092 # kafaka
+       - 10062:60010 # hbase
+     container_name: headnode1
+     hostname: headnode1.cluster
+     privileged: true
+     networks:
+       dev_cluster:
+         ipv4_address: 192.168.123.4
+     volumes:
+       - /etc/hosts:/etc/hosts
+       - /data/cloudera/headnode1/data:/data
+       - /data/cloudera/headnode1/mysql:/var/lib/mysql
+       - /data/cloudera/headnode1/mysql_files:/etc/mysql_files
+     command: bash -c "sudo chkconfig sshd on && sudo service sshd start && sudo service mysqld start && sudo service cloudera-scm-server-db start && sudo service cloudera-scm-server start && tail -f /dev/null"  
+networks:
+  dev_cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.123.0/24

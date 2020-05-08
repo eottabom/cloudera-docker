@@ -1,0 +1,5 @@
+192.168.123.2 datanode2.cluster
+192.168.123.3 datanode3.cluster
+192.168.123.4 headnode1.cluster
+192.168.123.5 datanode1.cluster
+
